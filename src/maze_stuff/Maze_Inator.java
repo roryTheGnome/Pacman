@@ -1,0 +1,165 @@
+package maze_stuff;
+
+import java.util.*;
+
+public class Maze_Inator {
+
+    private final int size;//i cant remember the word for horizontal size
+    private final int height;
+
+    private final CellType[][] maze;
+    private GameObject[][] gameObjects;
+
+    private int pacX=1;
+    private int pacY=1;
+
+    private final Random rando=new Random();
+
+
+    public Maze_Inator(int row, int colmns) {
+
+        this.size=row%2==0?row-1: row;
+        this.height=colmns%2==0?colmns-1: colmns;
+
+        this.maze=new CellType[height][size];
+        this.gameObjects = new GameObject[height][size];
+
+        for(int i=0;i<height;i++){
+            Arrays.fill(maze[i],CellType.WALL);
+            Arrays.fill(gameObjects[i], GameObject.NONE);
+        }
+
+        createMaze(1,1);//0,0 is the wall etc
+        //destroyDeadEnds();
+        //FIXME FIND A WAY TO TRIM DEAD ENDS
+
+        placeObjects();
+
+    }
+
+    public void createMaze(int x, int y) {
+
+        maze[y][x]=CellType.PATH;
+//https://www.baeldung.com/java-arrays-aslist-vs-new-arraylist
+        List<int[]> directs=Arrays.asList(
+                new int[]{0,-2}, // ^
+                new int[]{0,2},  // V
+                new int[]{2,0},  // >
+                new int[]{-2,0}  // <
+        );
+        Collections.shuffle(directs);
+
+        for(int[] d:directs){
+            int ix=x+d[0];
+            int iy=y+d[1];
+
+            if(isInFrame(ix,iy)&&maze[iy][ix]==CellType.WALL){
+                maze[y+d[1]/2][x+d[0]/2]=CellType.PATH;
+                createMaze(ix,iy);
+            }
+        }//FIXME
+
+    }
+    public boolean isInFrame(int x, int y) {
+        return  x>0 && y>0 && x<size && y<height;
+    }
+
+    public CellType[][] getMaze(){return maze;}
+
+    private void destroyDeadEnds() {
+        boolean changed;
+
+        do {
+            changed = false;
+
+            for (int y = 1; y < height - 1; y++) {
+                for (int x = 1; x < size - 1; x++) {
+                    if (maze[y][x] != CellType.PATH) continue;
+
+                    int open = 0;
+                    if (maze[y - 1][x] == CellType.PATH) open++;
+                    if (maze[y + 1][x] == CellType.PATH) open++;
+                    if (maze[y][x - 1] == CellType.PATH) open++;
+                    if (maze[y][x + 1] == CellType.PATH) open++;
+
+                    if (open == 1) {
+                        List<int[]> directions = new ArrayList<>(List.of(
+                                new int[]{0, -1}, new int[]{0, 1},
+                                new int[]{-1, 0}, new int[]{1, 0}
+                        ));
+                        Collections.shuffle(directions);
+
+                        for (int[] d : directions) {
+                            int nx = x + d[0];
+                            int ny = y + d[1];
+
+                            if (nx <= 0 || ny <= 0 || nx >= size - 1 || ny >= height - 1) continue;
+
+                            if (maze[ny][nx] == CellType.WALL) {
+                                int surroundingPaths = 0;
+
+                                if (ny > 0 && maze[ny - 1][nx] == CellType.PATH) surroundingPaths++;
+                                if (ny < height - 1 && maze[ny + 1][nx] == CellType.PATH) surroundingPaths++;
+                                if (nx > 0 && maze[ny][nx - 1] == CellType.PATH) surroundingPaths++;
+                                if (nx < size - 1 && maze[ny][nx + 1] == CellType.PATH) surroundingPaths++;
+
+                                if (surroundingPaths == 1) {
+                                    maze[ny][nx] = CellType.PATH;
+                                    changed = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        } while (changed);
+    }
+
+    private void placeObjects(){
+
+        for(int y=0;y<height;y++){
+
+            for(int x=0;x<size;x++){
+
+                if (maze[y][x] == CellType.PATH) {
+                    if (x == 1 && y == 1) {
+                        gameObjects[y][x] = GameObject.PACMAN;
+                    }else {
+                        gameObjects[y][x] = GameObject.DOT;
+                    }
+                }}
+        }
+    }
+
+    public GameObject[][] getGameObjects() {
+        return gameObjects;
+    }
+
+    public int getPacX(){return pacX;}
+    public int getPacY(){return pacY;}
+
+    public void movePackman(int x, int y){
+        int newX=pacX+x;
+        int newY=pacY+y;
+
+        if (newX<0 || newY<0 || newX>=size || newY>=height) {
+            return;
+        }
+        if(maze[newY][newX]!=CellType.PATH){
+            return;
+        }
+
+        if (gameObjects[newY][newX] == GameObject.DOT) {
+            gameObjects[newY][newX] = GameObject.NONE;
+        }
+
+        gameObjects[pacY][pacX] = GameObject.NONE;
+        pacX=newX;
+        pacY=newY;
+        gameObjects[pacY][pacX] = GameObject.PACMAN;
+
+    }
+
+}
