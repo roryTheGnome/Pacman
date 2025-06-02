@@ -171,6 +171,6 @@ public class Maze {
 //Create upgrades
 //Add dead logic                                                            DONE
 //Add death animation
-
+//Adjust the screen for bigger maze size
 
 //LOOK WHAT I FOUND ❤️
