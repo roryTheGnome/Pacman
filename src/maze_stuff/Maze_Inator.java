@@ -1,15 +1,20 @@
 package maze_stuff;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Maze_Inator {
 
     public static int score;
     private final int size;//i cant remember the word for horizontal size
     private final int height;
+    public static int lives;
 
     private final CellType[][] maze;
     private GameObject[][] gameObjects;
+    private final List<Point> ghostPositions = new ArrayList<>();
+
 
     private int pacX=1;
     private int pacY=1;
@@ -20,6 +25,7 @@ public class Maze_Inator {
     public Maze_Inator(int row, int colmns) {
 
         score=0;
+        lives=3;
 
         this.size=row%2==0?row-1: row;
         this.height=colmns%2==0?colmns-1: colmns;
@@ -37,6 +43,7 @@ public class Maze_Inator {
         //FIXME FIND A WAY TO TRIM DEAD ENDS
 
         placeObjects();
+        spawnGhosts();
 
     }
 
@@ -134,6 +141,97 @@ public class Maze_Inator {
                     }
                 }}
         }
+    }
+
+    private void spawnGhosts(){
+
+        int ghostCounter=4;//cause i found 4 photos
+        int ghostSoFar=0;
+
+        while(ghostSoFar<ghostCounter){
+
+            int x=rando.nextInt(size);
+            int y=rando.nextInt(height);
+
+            if(maze[y][x]==CellType.PATH && gameObjects[y][x]!=GameObject.PACMAN){
+                gameObjects[y][x] = GameObject.BLINKY;
+                ghostPositions.add(new Point(x, y));
+                ghostSoFar++;
+            }
+        }
+    }
+
+    /*public void moveGhosts(){
+
+        List<Point> newPositions = new ArrayList<>();
+
+        for (Point ghost : ghostPositions) {
+
+            int x=ghost.x;
+            int y=ghost.y;
+
+            List<Point> options = new ArrayList<>();
+            //TODO MAKE SURE IF ONE OF THE OPTIONS IS PACMAN, CHOOSE IT
+            if (isMovable(x + 1, y)) options.add(new Point(x + 1, y));
+            if (isMovable(x - 1, y)) options.add(new Point(x - 1, y));
+            if (isMovable(x, y + 1)) options.add(new Point(x, y + 1));
+            if (isMovable(x, y - 1)) options.add(new Point(x, y - 1));
+
+            Point next=options.get(rando.nextInt(options.size()));
+
+            gameObjects[y][x]=GameObject.DOT;//so that if there is no not left we have creaters to loop
+            if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
+                //TODO here comes the death
+                gameObjects[next.y][next.x] = GameObject.BLINKY;
+            } else {
+                gameObjects[next.y][next.x] = GameObject.BLINKY;
+            }
+            newPositions.add(next);
+            ghostPositions.addAll(newPositions);
+        }
+
+    }*/
+
+    public void moveGhosts() {
+        List<Point> newPositions = new ArrayList<>();
+
+        for (Point ghost : ghostPositions) {
+            int x = ghost.x;
+            int y = ghost.y;
+
+            List<Point> options = new ArrayList<>();
+            if (isMovable(x + 1, y)) options.add(new Point(x + 1, y));
+            if (isMovable(x - 1, y)) options.add(new Point(x - 1, y));
+            if (isMovable(x, y + 1)) options.add(new Point(x, y + 1));
+            if (isMovable(x, y - 1)) options.add(new Point(x, y - 1));
+
+            if (options.isEmpty()) {
+                newPositions.add(new Point(x, y));
+                continue;
+            }
+
+            Point next = options.get(rando.nextInt(options.size()));
+
+            gameObjects[y][x] = GameObject.DOT;
+
+            if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
+                //TODO GAME OVER ADD HERE
+                gameObjects[next.y][next.x] = GameObject.BLINKY;
+            } else {
+                gameObjects[next.y][next.x] = GameObject.BLINKY;
+            }
+
+            newPositions.add(next);
+        }
+
+        ghostPositions.clear();
+        ghostPositions.addAll(newPositions);
+    }
+
+    private boolean isMovable(int x, int y) {
+        return x >= 0 && y >= 0 && x < size && y < height &&
+                maze[y][x] == CellType.PATH &&
+                gameObjects[y][x] != GameObject.BLINKY; //yes im proud to write this in one line
     }
 
     public GameObject[][] getGameObjects() {return gameObjects;}

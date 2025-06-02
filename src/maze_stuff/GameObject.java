@@ -1,5 +1,5 @@
 package maze_stuff;
 
 public enum GameObject {
-    NONE, DOT, PACMAN
+    NONE, DOT, PACMAN, BLINKY
 }

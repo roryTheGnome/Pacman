@@ -147,6 +147,8 @@ public class MazeBoard extends JTable {
                 new ImageIcon("src/assets/death/2.png"),
                 new ImageIcon("src/assets/death/3.png")
         };
+        private final ImageIcon blinkyIcon = new ImageIcon("src/assets/ghosts/blinky.png");
+
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -184,7 +186,9 @@ public class MazeBoard extends JTable {
                                 pacman=pacmanRight;
                         }
                         setIcon(pacman[animationFrame]);
-                    } else {
+                    }else if(cell.object == GameObject.BLINKY) {
+                        setIcon(blinkyIcon);
+                    }else {
                         setIcon(null);
                     }
                 }

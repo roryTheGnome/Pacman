@@ -8,12 +8,12 @@ import java.awt.event.KeyEvent;
 import static maze_stuff.Maze_Inator.score;
 
 public class Maze {
-    public static int life;
+    //public static int life;
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             int r=20;
             int c=20;
-            life=3;
+            //life=3;
 
             Maze_Inator mazematic=new Maze_Inator(r,c);
             MazeBoard board=new MazeBoard(mazematic.getMaze(), mazematic.getGameObjects(),mazematic);
@@ -22,10 +22,13 @@ public class Maze {
             JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             infoPanel.setBackground(Color.darkGray);
 
-            for(int i=0;i<life;i++){
+            JPanel heartCounter=new JPanel(new FlowLayout(FlowLayout.LEFT));
+            heartCounter.setBackground(Color.darkGray);
+            for(int i=0;i<Maze_Inator.lives;i++){
                 JLabel hearts=new JLabel(new ImageIcon("src/assets/lifeCounter.png"));//FIND A WAY TO MAKE IT RED
-                infoPanel.add(hearts);
+                heartCounter.add(hearts);
             }
+            infoPanel.add(heartCounter);
 
             JLabel scores=new JLabel("   Score : "+score+"   ");
             scores.setForeground(Color.white);
@@ -88,17 +91,58 @@ public class Maze {
             });
             scoreBoard.setDaemon(true);
             scoreBoard.start();
+
+            Thread lifeBoard=new Thread(()->{
+                while(true){
+                    int currentLives=Maze_Inator.lives;
+
+                    SwingUtilities.invokeLater(() -> {
+                        heartCounter.removeAll();
+                        for (int i = 0; i < currentLives; i++) {
+                            JLabel hearts = new JLabel(new ImageIcon("src/assets/lifeCounter.png"));
+                            heartCounter.add(hearts);
+                        }
+                        heartCounter.revalidate();
+                        heartCounter.repaint();
+                    });
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+
+            });
+            lifeBoard.setDaemon(true);
+            lifeBoard.start();
+
+
+        Thread ghostThread = new Thread(() -> {
+            while (true) {
+                SwingUtilities.invokeLater(() -> {
+                    mazematic.moveGhosts();
+                    board.repaint();
+                });
+
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
         });
-    }
-}
+        ghostThread.setDaemon(true);
+        ghostThread.start();
+    });
+}}
 
 // ***TODO LIST-Vol3***
-//Add score board,timer and lives on the top
+//Add score board,timer and lives on the top                                DONE
 //Adjust the WALL's to look like bricks like in the og game
-//Add ghosts
+//Add ghosts                                                                DONE
 //Adjust packman animations to each direction                               DONE
-//Fin a way to make heart red pls
-
+//Fin a way to make heart red pls                                           NOPE      i changed my mind and add pacman face
+//Add game over logic
 
 
 //LOOK WHAT I FOUND ❤️
