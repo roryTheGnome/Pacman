@@ -23,7 +23,7 @@ public class Maze {
             infoPanel.setBackground(Color.darkGray);
 
             for(int i=0;i<life;i++){
-                JLabel hearts=new JLabel(" ❤\uFE0F ");//FIND A WAY TO MAKE IT RED
+                JLabel hearts=new JLabel(new ImageIcon("src/assets/lifeCounter.png"));//FIND A WAY TO MAKE IT RED
                 infoPanel.add(hearts);
             }
 
@@ -71,6 +71,23 @@ public class Maze {
             });
             timer.setDaemon(true);
             timer.start();
+
+            Thread scoreBoard=new Thread(()->{
+               while(true){
+                   int currentScore=Maze_Inator.score;
+
+                   SwingUtilities.invokeLater(() -> scores.setText("   Score : " + currentScore + "   "));
+
+                   try {
+                       Thread.sleep(100);
+                   } catch (InterruptedException e) {
+                       break;
+                   }
+               }
+
+            });
+            scoreBoard.setDaemon(true);
+            scoreBoard.start();
         });
     }
 }
