@@ -15,9 +15,10 @@ public class Maze_Inator {
     private GameObject[][] gameObjects;
     private final List<Point> ghostPositions = new ArrayList<>();
 
-
     private int pacX=1;
     private int pacY=1;
+
+    public boolean isPacmanDead=false;
 
     private final Random rando=new Random();
 
@@ -200,27 +201,66 @@ public class Maze_Inator {
             int y = ghost.y;
 
             List<Point> options = new ArrayList<>();
-            if (isMovable(x + 1, y)) options.add(new Point(x + 1, y));
-            if (isMovable(x - 1, y)) options.add(new Point(x - 1, y));
-            if (isMovable(x, y + 1)) options.add(new Point(x, y + 1));
-            if (isMovable(x, y - 1)) options.add(new Point(x, y - 1));
+            Point pacman=null;
 
-            if (options.isEmpty()) {
-                newPositions.add(new Point(x, y));
-                continue;
+            if (isMovable(x + 1, y)){
+                Point next = new Point(x + 1, y);
+                if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
+                    pacman = next;
+                }
+                options.add(next);
+            }
+            if (isMovable(x - 1, y)) {
+                Point next = new Point(x -1, y);
+                if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
+                    pacman = next;
+                }
+                options.add(next);
+            }
+            if (isMovable(x, y + 1)) {
+                Point next = new Point(x, y+1);
+                if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
+                    pacman = next;
+                }
+                options.add(next);
+            }
+            if (isMovable(x, y - 1)) {
+                Point next = new Point(x, y-1);
+                if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
+                    pacman = next;
+                }
+                options.add(next);
             }
 
-            Point next = options.get(rando.nextInt(options.size()));
+            Point next;
+
+            if (pacman != null) {
+                next = pacman;
+            } else if (!options.isEmpty()) {
+                next = options.get(rando.nextInt(options.size()));
+            } else {
+                newPositions.add(new Point(x, y)); // stay in place
+                continue;
+            }
 
             gameObjects[y][x] = GameObject.DOT;
 
             if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
-                //TODO GAME OVER ADD HERE
-                gameObjects[next.y][next.x] = GameObject.BLINKY;
-            } else {
-                gameObjects[next.y][next.x] = GameObject.BLINKY;
+                lives--;
+                System.out.println("minus 1 life");//keep for debugging
+                gameObjects[next.y][next.x] = GameObject.DEADMAN;
+                isPacmanDead=true;
+
+                if (lives <= 0) {
+                    System.out.println("GAME OVER\nSCORE: " + score);
+                    //TODO add here
+                }else{
+
+                }
+
             }
 
+            gameObjects[next.y][next.x] = GameObject.BLINKY;
             newPositions.add(next);
         }
 

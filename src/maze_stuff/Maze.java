@@ -13,7 +13,6 @@ public class Maze {
         SwingUtilities.invokeLater(() -> {
             int r=20;
             int c=20;
-            //life=3;
 
             Maze_Inator mazematic=new Maze_Inator(r,c);
             MazeBoard board=new MazeBoard(mazematic.getMaze(), mazematic.getGameObjects(),mazematic);
@@ -121,6 +120,31 @@ public class Maze {
             while (true) {
                 SwingUtilities.invokeLater(() -> {
                     mazematic.moveGhosts();
+                    if (mazematic.isPacmanDead && Maze_Inator.lives > 0) {
+                        new Thread(() -> {
+                           try{
+                               Thread.sleep(450);//150*3 change here if you change the animation speed
+                           } catch (InterruptedException e) {}
+
+                            SwingUtilities.invokeLater(() -> {
+                                // Clear old Pacman position (now BLINKY probably)
+                                for (int y = 0; y < mazematic.getMaze().length; y++) {
+                                    for (int x = 0; x < mazematic.getMaze()[0].length; x++) {
+                                        if (mazematic.getGameObjects()[y][x] == GameObject.DEADMAN) {
+                                            mazematic.getGameObjects()[y][x] = GameObject.DOT;
+                                        }
+                                    }
+                                }
+
+                                // Reset Pacman to (1,1)
+                                mazematic.movePackman(1 - mazematic.getPacX(), 1 - mazematic.getPacY());
+
+                                // Reset flag
+                                mazematic.isPacmanDead = false;
+                            });
+
+                        }).start();
+                    }
                     board.repaint();
                 });
 
@@ -143,6 +167,10 @@ public class Maze {
 //Adjust packman animations to each direction                               DONE
 //Fin a way to make heart red pls                                           NOPE      i changed my mind and add pacman face
 //Add game over logic
+//Add other ghosts
+//Create upgrades
+//Add dead logic                                                            DONE
+//Add death animation
 
 
 //LOOK WHAT I FOUND ❤️

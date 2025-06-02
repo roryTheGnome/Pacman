@@ -188,6 +188,8 @@ public class MazeBoard extends JTable {
                         setIcon(pacman[animationFrame]);
                     }else if(cell.object == GameObject.BLINKY) {
                         setIcon(blinkyIcon);
+                    }else if(cell.object == GameObject.DEADMAN) {
+                        setIcon(pacmanDeath[animationFrame]);
                     }else {
                         setIcon(null);
                     }
