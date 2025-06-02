@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Maze_Inator {
 
+    public static int score;
     private final int size;//i cant remember the word for horizontal size
     private final int height;
 
@@ -17,6 +18,8 @@ public class Maze_Inator {
 
 
     public Maze_Inator(int row, int colmns) {
+
+        score=0;
 
         this.size=row%2==0?row-1: row;
         this.height=colmns%2==0?colmns-1: colmns;
@@ -133,9 +136,7 @@ public class Maze_Inator {
         }
     }
 
-    public GameObject[][] getGameObjects() {
-        return gameObjects;
-    }
+    public GameObject[][] getGameObjects() {return gameObjects;}
 
     public int getPacX(){return pacX;}
     public int getPacY(){return pacY;}
@@ -153,6 +154,8 @@ public class Maze_Inator {
 
         if (gameObjects[newY][newX] == GameObject.DOT) {
             gameObjects[newY][newX] = GameObject.NONE;
+            score++;
+            System.out.println("score is:"+score);  //not needed, used for debugging
         }
 
         gameObjects[pacY][pacX] = GameObject.NONE;

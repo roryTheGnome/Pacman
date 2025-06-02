@@ -12,7 +12,7 @@ public class MazeBoard extends JTable {
     private int animationFrame = 0;
 
     private Thread moveThread;
-    private volatile String currentDirection = null;
+    private volatile String currentDirection = "RIGHT";
     private volatile boolean running = false;
 
     public MazeBoard(CellType[][] maze, GameObject[][] objects, Maze_Inator mazeinator) {
@@ -127,6 +127,26 @@ public class MazeBoard extends JTable {
                 new ImageIcon("src/assets/right/2.png"),
                 new ImageIcon("src/assets/right/3.png")
         };
+        private final ImageIcon[] pacmanLeft = {
+                new ImageIcon("src/assets/left/1.png"),
+                new ImageIcon("src/assets/left/2.png"),
+                new ImageIcon("src/assets/left/3.png")
+        };
+        private final ImageIcon[] pacmanDown = {
+                new ImageIcon("src/assets/down/1.png"),
+                new ImageIcon("src/assets/down/2.png"),
+                new ImageIcon("src/assets/down/3.png")
+        };
+        private final ImageIcon[] pacmanUp = {
+                new ImageIcon("src/assets/up/1.png"),
+                new ImageIcon("src/assets/up/2.png"),
+                new ImageIcon("src/assets/up/3.png")
+        };
+        private final ImageIcon[] pacmanDeath = {
+                new ImageIcon("src/assets/death/1.png"),
+                new ImageIcon("src/assets/death/2.png"),
+                new ImageIcon("src/assets/death/3.png")
+        };
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -145,7 +165,25 @@ public class MazeBoard extends JTable {
                     if (cell.object == GameObject.DOT) {
                         setIcon(dotIcon);
                     } else if (cell.object == GameObject.PACMAN) {
-                        setIcon(pacmanRight[animationFrame]);
+                        //setIcon(pacmanRight[animationFrame]);
+                        ImageIcon[] pacman = pacmanRight;
+                        switch (currentDirection) {
+                            case "UP": 
+                                pacman= pacmanUp;
+                                break;
+                            case "DOWN":
+                                pacman = pacmanDown;
+                                break;
+                            case "LEFT":
+                                pacman= pacmanLeft;
+                                break;
+                            case "RIGHT":
+                                pacman = pacmanRight;
+                                break;
+                            default:
+                                pacman=pacmanRight;
+                        }
+                        setIcon(pacman[animationFrame]);
                     } else {
                         setIcon(null);
                     }
