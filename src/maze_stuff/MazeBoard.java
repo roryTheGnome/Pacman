@@ -15,11 +15,11 @@ public class MazeBoard extends JTable {
     private volatile String currentDirection = "RIGHT";
     private volatile boolean running = false;
 
-    public MazeBoard(CellType[][] maze, GameObject[][] objects, Maze_Inator mazeinator) {
+    public MazeBoard(CellType[][] maze, GameObject[][] objects, Maze_Inator mazeinator, int cellSize) {
         super(new MazeModel(maze, objects, mazeinator));
         this.mazeinator = mazeinator;
 
-        setRowHeight(20);
+        setRowHeight(cellSize);
         setShowGrid(false);
         setIntercellSpacing(new Dimension(0, 0));
         setDefaultRenderer(Object.class, new CellRenderer());

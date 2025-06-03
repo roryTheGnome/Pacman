@@ -11,11 +11,24 @@ public class Maze {
     //public static int life;
     public static void startGame() {
         SwingUtilities.invokeLater(() -> {
-            int r=50;
-            int c=20;
+            int r=100;
+            int c=100;
 
-            Maze_Inator mazematic=new Maze_Inator(r,c);
-            MazeBoard board=new MazeBoard(mazematic.getMaze(), mazematic.getGameObjects(),mazematic);
+            int maxWindowWidth = 1200;
+            int maxWindowHeight = 800;
+
+            int tileWidth = maxWindowWidth / r;
+            int tileHeight = (maxWindowHeight-100) / c;
+            int cellSize = Math.min(tileWidth, tileHeight);
+
+
+            //Maze_Inator mazematic=new Maze_Inator(r,c);
+            //MazeBoard board=new MazeBoard(mazematic.getMaze(), mazematic.getGameObjects(),mazematic);
+
+            Maze_Inator mazematic = new Maze_Inator(r, c);
+            MazeBoard board = new MazeBoard(mazematic.getMaze(), mazematic.getGameObjects(), mazematic, cellSize);
+
+
 
             //THE UP PANEL STUFF
             JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
