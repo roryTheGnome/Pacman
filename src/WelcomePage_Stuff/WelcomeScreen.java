@@ -1,5 +1,7 @@
 package WelcomePage_Stuff;
 
+import maze_stuff.Maze;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -87,6 +89,8 @@ public class WelcomeScreen extends JFrame {
         switch (label) {
             case "New Game" :
                 System.out.println("New Game clicked"); //here for debugging
+                dispose();
+                Maze.startGame();
                 //TODO add game connect
                 break;
             case "High Scores" :
@@ -116,4 +120,5 @@ public class WelcomeScreen extends JFrame {
 //add buttons 3                         DONE
 //add high scores page                  DONE
 //add high scores doc                   DONE
-//connect it to the game
+//connect it to the game                DONE
+//set the game board size rules

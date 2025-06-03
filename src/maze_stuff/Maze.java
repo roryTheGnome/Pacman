@@ -9,9 +9,9 @@ import static maze_stuff.Maze_Inator.score;
 
 public class Maze {
     //public static int life;
-    public static void main(String[] args) {
+    public static void startGame() {
         SwingUtilities.invokeLater(() -> {
-            int r=20;
+            int r=50;
             int c=20;
 
             Maze_Inator mazematic=new Maze_Inator(r,c);
@@ -158,7 +158,11 @@ public class Maze {
         ghostThread.setDaemon(true);
         ghostThread.start();
     });
-}}
+}
+    public static void main (String args[]){
+        startGame();
+    }
+}
 
 // ***TODO LIST-Vol3***
 //Add score board,timer and lives on the top                                DONE
