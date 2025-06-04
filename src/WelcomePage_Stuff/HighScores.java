@@ -131,4 +131,4 @@ public class HighScores extends JPanel {
         Color green = new Color(57, 255, 20);
         Color blue=new Color(4, 55, 242);
         Color red=new Color(255, 49, 49);
- */
+ */ //Colors

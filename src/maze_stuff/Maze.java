@@ -19,23 +19,16 @@ public class Maze {
             int tileHeight = (maxWindowHeight-100) / c;
             int cellSize = Math.min(tileWidth, tileHeight);
 
-
-            //Maze_Inator mazematic=new Maze_Inator(r,c);
-            //MazeBoard board=new MazeBoard(mazematic.getMaze(), mazematic.getGameObjects(),mazematic);
-
             Maze_Inator mazematic = new Maze_Inator(r, c);
             MazeBoard board = new MazeBoard(mazematic.getMaze(), mazematic.getGameObjects(), mazematic, cellSize);
 
-
-
-            //THE UP PANEL STUFF
             JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             infoPanel.setBackground(Color.darkGray);
 
             JPanel heartCounter=new JPanel(new FlowLayout(FlowLayout.LEFT));
             heartCounter.setBackground(Color.darkGray);
             for(int i=0;i<Maze_Inator.lives;i++){
-                JLabel hearts=new JLabel(new ImageIcon("src/assets/lifeCounter.png"));//FIND A WAY TO MAKE IT RED
+                JLabel hearts=new JLabel(new ImageIcon("src/assets/lifeCounter.png"));
                 heartCounter.add(hearts);
             }
             infoPanel.add(heartCounter);
@@ -44,7 +37,7 @@ public class Maze {
             scores.setForeground(Color.white);
             infoPanel.add(scores);
 
-            JLabel timeline=new JLabel("Time : 00:00");//DO NOT USE TIMER
+            JLabel timeline=new JLabel("Time : 00:00");//DO NOT USE TIMER!!!!
             timeline.setForeground(Color.white);
             infoPanel.add(timeline);
 
@@ -58,7 +51,6 @@ public class Maze {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.add(cont);
             frame.pack();
-            frame.setResizable(false);
             frame.setLocationRelativeTo(null);
 
 
@@ -134,11 +126,10 @@ public class Maze {
                     if (mazematic.isPacmanDead && Maze_Inator.lives > 0) {
                         new Thread(() -> {
                            try{
-                               Thread.sleep(450);//150*3 change here if you change the animation speed
+                               Thread.sleep(450);//150*3 change here if you change the animation speed!!!!!
                            } catch (InterruptedException e) {}
 
                             SwingUtilities.invokeLater(() -> {
-                                // Clear old Pacman position (now BLINKY probably)
                                 for (int y = 0; y < mazematic.getMaze().length; y++) {
                                     for (int x = 0; x < mazematic.getMaze()[0].length; x++) {
                                         if (mazematic.getGameObjects()[y][x] == GameObject.DEADMAN) {
@@ -147,10 +138,8 @@ public class Maze {
                                     }
                                 }
 
-                                // Reset Pacman to (1,1)
                                 mazematic.movePackman(1 - mazematic.getPacX(), 1 - mazematic.getPacY());
 
-                                // Reset flag
                                 mazematic.isPacmanDead = false;
                             });
 
@@ -175,18 +164,20 @@ public class Maze {
     }
 }
 
-// ***TODO LIST-Vol3***
+// ***TODO LIST-Vol2***
 //Add score board,timer and lives on the top                                DONE
 //Adjust the WALL's to look like bricks like in the og game
 //Add ghosts                                                                DONE
 //Adjust packman animations to each direction                               DONE
 //Fin a way to make heart red pls                                           NOPE      i changed my mind and add pacman face
 //Add game over logic
+//Add the new score into the score board
 //Add other ghosts
 //Create upgrades
 //Add dead logic                                                            DONE
 //Add death animation
 //Adjust the screen for bigger maze size                                    DONE
 //Add pause and go back to menu in game mode
+//Adjust the dead ends and make sure there r multi-path between 2 points    DONE
 
 //LOOK WHAT I FOUND ❤️

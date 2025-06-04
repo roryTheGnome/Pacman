@@ -113,7 +113,6 @@ public class WelcomeScreen extends JFrame {
         JDialog dialog = new JDialog(this, "New Game",true);
         dialog.setSize(300,200);
         dialog.setLocationRelativeTo(this);
-        dialog.setResizable(false);
         dialog.setLayout(new BorderLayout());
 
         JLabel txt=new JLabel("Enter board size",JLabel.CENTER);
@@ -169,9 +168,7 @@ public class WelcomeScreen extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(WelcomeScreen::new);
-    }
+    public static void main(String[] args) {SwingUtilities.invokeLater(WelcomeScreen::new);}
 }
 
 //***TODO LIST***
@@ -181,3 +178,4 @@ public class WelcomeScreen extends JFrame {
 //add high scores doc                   DONE
 //connect it to the game                DONE
 //set the game board size rules         DONE
+//Maybe add main to Main class??

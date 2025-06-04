@@ -40,8 +40,7 @@ public class Maze_Inator {
         }
 
         createMaze(1,1);//0,0 is the wall etc
-        //destroyDeadEnds();
-        //FIXME FIND A WAY TO TRIM DEAD ENDS
+        removeDeadEnds();
 
         placeObjects();
         spawnGhosts();
@@ -71,13 +70,14 @@ public class Maze_Inator {
         }//FIXME
 
     }
+
     public boolean isInFrame(int x, int y) {
         return  x>0 && y>0 && x<size && y<height;
     }
 
     public CellType[][] getMaze(){return maze;}
 
-    private void destroyDeadEnds() {
+    private void removeDeadEnds() {
         boolean changed;
 
         do {
@@ -93,7 +93,7 @@ public class Maze_Inator {
                     if (maze[y][x - 1] == CellType.PATH) open++;
                     if (maze[y][x + 1] == CellType.PATH) open++;
 
-                    if (open == 1) {
+                    if (open == 1) { // dead end
                         List<int[]> directions = new ArrayList<>(List.of(
                                 new int[]{0, -1}, new int[]{0, 1},
                                 new int[]{-1, 0}, new int[]{1, 0}
@@ -104,27 +104,15 @@ public class Maze_Inator {
                             int nx = x + d[0];
                             int ny = y + d[1];
 
-                            if (nx <= 0 || ny <= 0 || nx >= size - 1 || ny >= height - 1) continue;
-
                             if (maze[ny][nx] == CellType.WALL) {
-                                int surroundingPaths = 0;
-
-                                if (ny > 0 && maze[ny - 1][nx] == CellType.PATH) surroundingPaths++;
-                                if (ny < height - 1 && maze[ny + 1][nx] == CellType.PATH) surroundingPaths++;
-                                if (nx > 0 && maze[ny][nx - 1] == CellType.PATH) surroundingPaths++;
-                                if (nx < size - 1 && maze[ny][nx + 1] == CellType.PATH) surroundingPaths++;
-
-                                if (surroundingPaths == 1) {
-                                    maze[ny][nx] = CellType.PATH;
-                                    changed = true;
-                                    break;
-                                }
+                                maze[ny][nx] = CellType.PATH;
+                                changed = true;
+                                break;
                             }
                         }
                     }
                 }
             }
-
         } while (changed);
     }
 
@@ -161,37 +149,6 @@ public class Maze_Inator {
             }
         }
     }
-
-    /*public void moveGhosts(){
-
-        List<Point> newPositions = new ArrayList<>();
-
-        for (Point ghost : ghostPositions) {
-
-            int x=ghost.x;
-            int y=ghost.y;
-
-            List<Point> options = new ArrayList<>();
-            //TODO MAKE SURE IF ONE OF THE OPTIONS IS PACMAN, CHOOSE IT
-            if (isMovable(x + 1, y)) options.add(new Point(x + 1, y));
-            if (isMovable(x - 1, y)) options.add(new Point(x - 1, y));
-            if (isMovable(x, y + 1)) options.add(new Point(x, y + 1));
-            if (isMovable(x, y - 1)) options.add(new Point(x, y - 1));
-
-            Point next=options.get(rando.nextInt(options.size()));
-
-            gameObjects[y][x]=GameObject.DOT;//so that if there is no not left we have creaters to loop
-            if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
-                //TODO here comes the death
-                gameObjects[next.y][next.x] = GameObject.BLINKY;
-            } else {
-                gameObjects[next.y][next.x] = GameObject.BLINKY;
-            }
-            newPositions.add(next);
-            ghostPositions.addAll(newPositions);
-        }
-
-    }*/
 
     public void moveGhosts() {
         List<Point> newPositions = new ArrayList<>();
