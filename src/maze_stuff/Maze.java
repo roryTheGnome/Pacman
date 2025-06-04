@@ -9,10 +9,8 @@ import static maze_stuff.Maze_Inator.score;
 
 public class Maze {
     //public static int life;
-    public static void startGame() {
+    public static void startGame(int r,int c) {
         SwingUtilities.invokeLater(() -> {
-            int r=100;
-            int c=100;
 
             int maxWindowWidth = 1200;
             int maxWindowHeight = 800;
@@ -54,13 +52,13 @@ public class Maze {
             cont.setLayout(new BorderLayout());
             cont.add(infoPanel, BorderLayout.NORTH);
 
-            cont.add(new JScrollPane(board), BorderLayout.CENTER);
+            cont.add(board, BorderLayout.CENTER);
 
             JFrame frame=new JFrame("Packman");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            //frame.add(new JScrollPane(board));
             frame.add(cont);
             frame.pack();
+            frame.setResizable(false);
             frame.setLocationRelativeTo(null);
 
 
@@ -173,7 +171,7 @@ public class Maze {
     });
 }
     public static void main (String args[]){
-        startGame();
+        startGame(50,50);
     }
 }
 
@@ -188,6 +186,7 @@ public class Maze {
 //Create upgrades
 //Add dead logic                                                            DONE
 //Add death animation
-//Adjust the screen for bigger maze size
+//Adjust the screen for bigger maze size                                    DONE
+//Add pause and go back to menu in game mode
 
 //LOOK WHAT I FOUND ❤️

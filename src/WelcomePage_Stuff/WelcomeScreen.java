@@ -89,9 +89,7 @@ public class WelcomeScreen extends JFrame {
         switch (label) {
             case "New Game" :
                 System.out.println("New Game clicked"); //here for debugging
-                dispose();
-                Maze.startGame();
-                //TODO add game connect
+                newGame();
                 break;
             case "High Scores" :
                 System.out.println("High Scores clicked"); //here fot debuggong purp.
@@ -110,6 +108,67 @@ public class WelcomeScreen extends JFrame {
         }
     }
 
+    private void newGame(){
+
+        JDialog dialog = new JDialog(this, "New Game",true);
+        dialog.setSize(300,200);
+        dialog.setLocationRelativeTo(this);
+        dialog.setResizable(false);
+        dialog.setLayout(new BorderLayout());
+
+        JLabel txt=new JLabel("Enter board size",JLabel.CENTER);
+        txt.setFont(pacmanFont.deriveFont(22f));
+        dialog.add(txt,BorderLayout.NORTH);
+
+        JPanel choices=new JPanel(new GridLayout(2,2,10,10));
+        choices.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        JLabel w=new JLabel("Width:");
+        JTextField wChoice=new JTextField("20");
+
+        JLabel h=new JLabel("Height:");
+        JTextField hChoice=new JTextField("20");
+
+        choices.add(w);
+        choices.add(wChoice);
+        choices.add(h);
+        choices.add(hChoice);
+
+        dialog.add(choices,BorderLayout.CENTER);
+
+        JButton letsGetThisStarted=new JButton("ENTER");
+        letsGetThisStarted.setFont(pacmanFont.deriveFont(20f));
+        letsGetThisStarted.setBackground(Color.YELLOW);
+        letsGetThisStarted.setFocusPainted(false);
+
+        letsGetThisStarted.addActionListener(e -> {
+            try {
+                int width = Integer.parseInt(wChoice.getText().trim());
+                int height = Integer.parseInt(hChoice.getText().trim());
+
+                if (width < 10 || width > 100 || height < 10 || height > 100) {
+                    JOptionPane.showMessageDialog(dialog, "Enter values between 10 and 100");
+                    return;
+                }
+
+                dialog.dispose();
+                dispose();
+                Maze.startGame(height, width);
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Please enter valid NUMBERS");
+            }
+        });
+
+        JPanel bp=new JPanel();
+        bp.add(letsGetThisStarted);
+
+        dialog.add(bp,BorderLayout.SOUTH);
+        dialog.getRootPane().setDefaultButton(letsGetThisStarted);
+        dialog.setVisible(true);
+
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(WelcomeScreen::new);
     }
@@ -121,4 +180,4 @@ public class WelcomeScreen extends JFrame {
 //add high scores page                  DONE
 //add high scores doc                   DONE
 //connect it to the game                DONE
-//set the game board size rules
+//set the game board size rules         DONE
