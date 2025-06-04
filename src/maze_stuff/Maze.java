@@ -177,7 +177,7 @@ public class Maze {
 //Add dead logic                                                            DONE
 //Add death animation
 //Adjust the screen for bigger maze size                                    DONE
-//Add pause and go back to menu in game mode
+//Add go back to menu in game mode via crtl+shift+q                         DONE
 //Adjust the dead ends and make sure there r multi-path between 2 points    DONE
 
 //LOOK WHAT I FOUND ❤️

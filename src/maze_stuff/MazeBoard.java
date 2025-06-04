@@ -1,9 +1,13 @@
 package maze_stuff;
 
+import WelcomePage_Stuff.WelcomeScreen;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 
 public class MazeBoard extends JTable {
@@ -57,6 +61,19 @@ public class MazeBoard extends JTable {
             }
         });
         startAnimationThread();
+
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK), "exitToMenu");
+
+        getActionMap().put("exitToMenu", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Window w=SwingUtilities.getWindowAncestor(MazeBoard.this);
+                if(w!=null)w.dispose();
+
+                SwingUtilities.invokeLater(WelcomeScreen::new);
+            }
+        });
+
     }
 
     private void startAnimationThread() {
