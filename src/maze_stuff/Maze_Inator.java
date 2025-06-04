@@ -19,6 +19,7 @@ public class Maze_Inator {
     private int pacY=1;
 
     public boolean isPacmanDead=false;
+    public boolean gameOver=false;
 
     private final Random rando=new Random();
 
@@ -210,7 +211,7 @@ public class Maze_Inator {
 
                 if (lives <= 0) {
                     System.out.println("GAME OVER\nSCORE: " + score);
-                    //TODO add here
+                    gameOver=true;
                 }else{
 
                 }
@@ -259,5 +260,7 @@ public class Maze_Inator {
         gameObjects[pacY][pacX] = GameObject.PACMAN;
 
     }
+
+    public boolean isGameOver(){return gameOver;}
 
 }

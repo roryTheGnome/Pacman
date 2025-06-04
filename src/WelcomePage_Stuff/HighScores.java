@@ -11,7 +11,8 @@ import java.util.Scanner;
 import java.io.IOException;
 
 public class HighScores extends JPanel {
-    private List<Integer> scores;
+    //private List<Integer> scores;
+    private List<ScoreEntry> scores;
     private Font titleFont;
     private Font scoreFont;
 
@@ -31,10 +32,21 @@ public class HighScores extends JPanel {
        add(title);
 
 
-       for(int i=0;i<scores.size();i++){
+       /*for(int i=0;i<scores.size();i++){
            String rank=String.format("%2d.", i + 1);//first part jsut cause it looks fancy
            String score=String.format("%04d", scores.get(i));
            JLabel scoreLabel = new JLabel(rank + "    " + score);
+           scoreLabel.setFont(scoreFont);
+           scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
+           scoreLabel.setForeground(dropOfRainbow(i));
+           add(scoreLabel);
+       }*/
+
+       for(int i=0;i<scores.size();i++){
+           ScoreEntry entry = scores.get(i);
+           String rank = String.format("%2d.", i + 1);
+           String scoreLine = String.format("%s    %04d  -  %s", rank, entry.score, entry.nickname);
+           JLabel scoreLabel = new JLabel(scoreLine);
            scoreLabel.setFont(scoreFont);
            scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
            scoreLabel.setForeground(dropOfRainbow(i));
@@ -67,15 +79,20 @@ public class HighScores extends JPanel {
 
    private void getScores() {
        scores = new ArrayList<>();
-       try (Scanner scanner = new Scanner(new File("src/HighScores.txt"))) {
-           while (scanner.hasNextInt()) {
-               scores.add(scanner.nextInt());
+       try (Scanner scnn = new Scanner(new File("src/HighScores.txt"))) {
+           while (scnn.hasNextLine()) {
+               String line=scnn.nextLine().trim();
+               if(line.matches("\\d{4}-[A-Z]{3}")){
+                   int score = Integer.parseInt(line.substring(0, 4));
+                   String nick = line.substring(5); // after "-"
+                   scores.add(new ScoreEntry(score, nick));
+               }
            }
        } catch (IOException e) {
            System.out.println("erorr while uploading high scores file");
            //FIXME send back to main menu maybe?
        }
-       scores.sort(Comparator.reverseOrder());
+       scores.sort((a, b) -> Integer.compare(b.score, a.score));
        if (scores.size() > 10) {
            scores = scores.subList(0, 10);
        }

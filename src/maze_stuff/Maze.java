@@ -1,9 +1,17 @@
 package maze_stuff;
 
+import WelcomePage_Stuff.WelcomeScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static maze_stuff.Maze_Inator.score;
 
@@ -119,7 +127,7 @@ public class Maze {
             lifeBoard.start();
 
 
-        Thread ghostThread = new Thread(() -> {
+        /*Thread ghostThread = new Thread(() -> {
             while (true) {
                 SwingUtilities.invokeLater(() -> {
                     mazematic.moveGhosts();
@@ -154,8 +162,94 @@ public class Maze {
                     break;
                 }
             }
-        });
-        ghostThread.setDaemon(true);
+        });*/
+
+            Thread ghostThread = new Thread(() -> {
+                AtomicBoolean hasHandledGameOver = new AtomicBoolean(false);
+
+                while (true) {
+                    SwingUtilities.invokeLater(() -> {
+                        if (!mazematic.isGameOver()) {
+                            mazematic.moveGhosts();
+
+                            if (mazematic.isPacmanDead && Maze_Inator.lives > 0) {
+                                new Thread(() -> {
+                                    try {
+                                        Thread.sleep(450);
+                                    } catch (InterruptedException e) {}
+
+                                    SwingUtilities.invokeLater(() -> {
+                                        for (int y = 0; y < mazematic.getMaze().length; y++) {
+                                            for (int x = 0; x < mazematic.getMaze()[0].length; x++) {
+                                                if (mazematic.getGameObjects()[y][x] == GameObject.DEADMAN) {
+                                                    mazematic.getGameObjects()[y][x] = GameObject.DOT;
+                                                }
+                                            }
+                                        }
+
+                                        mazematic.movePackman(1 - mazematic.getPacX(), 1 - mazematic.getPacY());
+                                        mazematic.isPacmanDead = false;
+                                    });
+                                }).start();
+                            }
+
+                            board.repaint();
+                        }
+
+                        if (mazematic.isGameOver() && !hasHandledGameOver.get()) {
+                            hasHandledGameOver.set(true);
+
+                            /*JOptionPane.showMessageDialog(
+                                    null,
+                                    "GAME OVER\nSCORE: " + Maze_Inator.score,
+                                    "Game Over",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );*/
+
+                            String nickname = "";
+                            while (nickname == null || nickname.length() != 3) {
+                                nickname = JOptionPane.showInputDialog(
+                                        null,
+                                        "GAME OVER\nSCORE: " + Maze_Inator.score + "\n\nENTER YOUR NICK (3 LETTERS):",
+                                        "Game Over",
+                                        JOptionPane.PLAIN_MESSAGE
+                                );
+
+                                if (nickname == null) return;
+                                nickname = nickname.trim().toUpperCase();
+                            }
+
+                            String formattedScore = String.format("%04d-%s", Maze_Inator.score, nickname);
+                            try {
+                                Path path = Paths.get("src/HighScores.txt");
+                                Files.write(path, (formattedScore + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+
+
+                            Window window = SwingUtilities.getWindowAncestor(board);
+                            if (window != null) {
+                                window.dispose();
+                            }
+
+                            SwingUtilities.invokeLater(WelcomeScreen::new);
+                        }
+                    });
+
+                    if (hasHandledGameOver.get()) break;
+
+                    try {
+                        Thread.sleep(400);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            });
+
+
+
+            ghostThread.setDaemon(true);
         ghostThread.start();
     });
 }
@@ -170,8 +264,8 @@ public class Maze {
 //Add ghosts                                                                DONE
 //Adjust packman animations to each direction                               DONE
 //Fin a way to make heart red pls                                           NOPE      i changed my mind and add pacman face
-//Add game over logic
-//Add the new score into the score board
+//Add game over logic                                                       DONE
+//Add the new score into the score board                                    DONE
 //Add other ghosts
 //Create upgrades
 //Add dead logic                                                            DONE
@@ -179,5 +273,6 @@ public class Maze {
 //Adjust the screen for bigger maze size                                    DONE
 //Add go back to menu in game mode via crtl+shift+q                         DONE
 //Adjust the dead ends and make sure there r multi-path between 2 points    DONE
+//There is something wrong with the death, fix it
 
 //LOOK WHAT I FOUND ❤️
