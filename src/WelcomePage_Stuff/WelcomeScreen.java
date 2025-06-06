@@ -178,5 +178,6 @@ public class WelcomeScreen extends JFrame {
 //add high scores doc                   DONE
 //connect it to the game                DONE
 //set the game board size rules         DONE
-//Maybe add main to Main class??
+//Maybe add main to Main class??        DONE
 //Fix highscores                        DONE
+//Fix high scores

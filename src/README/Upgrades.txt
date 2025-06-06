@@ -1,0 +1,8 @@
+********************************************************UPGRADES********************************************************
+NO    NAME                PURPOSE                                                     ASSET
+..    ..........          ..................................                          ..................................
+1-    MULTIPLIER          Score x2 for 10 seconds	                                  src/assets/upgrades/apple.png
+2-    LIFE     	          Adds +1 life	                                              src/assets/upgrades/heart.png
+3-    SHIELD	          Ignores next ghost collision	                              src/assets/upgrades/shield.png
+4-    FREEZE              Stops ghosts move for 5 sec  asset                          src/assets/upgrades/strawberry.png
+5-    SCORE               Adds extra 20 Score                                         src/assets/upgrades/cherry.png

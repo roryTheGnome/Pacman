@@ -10,6 +10,13 @@ public class Maze_Inator {
     private final int size;//i cant remember the word for horizontal size
     private final int height;
     public static int lives;
+    private long prevDeath=0;
+
+    public boolean shileded=false;
+    public long shieldEndTime=0;
+    public boolean doubleScored=false;
+    public long doubleScoreEndTime=0;
+    public long freezeEndTime=0;
 
     private final CellType[][] maze;
     private GameObject[][] gameObjects;
@@ -153,6 +160,7 @@ public class Maze_Inator {
 
     public void moveGhosts() {
         List<Point> newPositions = new ArrayList<>();
+        if (System.currentTimeMillis() < freezeEndTime) return;
 
         for (Point ghost : ghostPositions) {
             int x = ghost.x;
@@ -203,8 +211,9 @@ public class Maze_Inator {
 
             gameObjects[y][x] = GameObject.DOT;
 
-            if (gameObjects[next.y][next.x] == GameObject.PACMAN) {
+            if (gameObjects[next.y][next.x] == GameObject.PACMAN && !recentltDied() && !shileded) {
                 lives--;
+                prevDeath=System.currentTimeMillis();
                 System.out.println("minus 1 life");//keep for debugging
                 gameObjects[next.y][next.x] = GameObject.DEADMAN;
                 isPacmanDead=true;
@@ -221,6 +230,28 @@ public class Maze_Inator {
             gameObjects[next.y][next.x] = GameObject.BLINKY;
             newPositions.add(next);
         }
+        if (rando.nextInt(100) < 25) { // 25% chance
+            int ux = rando.nextInt(size);
+            int uy = rando.nextInt(height);
+            if (maze[uy][ux] == CellType.PATH && gameObjects[uy][ux] == GameObject.DOT) {
+                GameObject upgrade = switch (rando.nextInt(5)) {
+                    case 0 -> GameObject.UPGRADE_MULTIPLIER;
+                    case 1 -> GameObject.UPGRADE_LIFE;
+                    case 2 -> GameObject.UPGRADE_SHIELD;
+                    case 3 -> GameObject.UPGRADE_FREEZE;
+                    case 4 -> GameObject.UPGRADE_SCORE;
+                    default -> GameObject.UPGRADE_SHIELD;
+                    /*case 0 -> GameObject.UPGRADE_SHIELD;
+                    case 1 -> GameObject.UPGRADE_SHIELD;
+                    case 2 -> GameObject.UPGRADE_SHIELD;
+                    case 3 -> GameObject.UPGRADE_SHIELD;
+                    case 4 -> GameObject.UPGRADE_SHIELD;
+                    default -> GameObject.UPGRADE_SHIELD;*/ //to check the upgrades one by one
+                };
+                gameObjects[uy][ux] = upgrade;
+            }
+        }
+
 
         ghostPositions.clear();
         ghostPositions.addAll(newPositions);
@@ -237,30 +268,72 @@ public class Maze_Inator {
     public int getPacX(){return pacX;}
     public int getPacY(){return pacY;}
 
-    public void movePackman(int x, int y){
-        int newX=pacX+x;
-        int newY=pacY+y;
+    public void movePackman(int dx, int dy) {
+        int newX = pacX + dx;
+        int newY = pacY + dy;
 
-        if (newX<0 || newY<0 || newX>=size || newY>=height) {
+        if (newX < 0 || newY < 0 || newX >= size || newY >= height) return;
+        if (maze[newY][newX] != CellType.PATH) return;
+
+        GameObject target = gameObjects[newY][newX];
+
+        if (target == GameObject.BLINKY && !recentltDied() && !shileded) {
+            lives--;
+            prevDeath=System.currentTimeMillis();
+            System.out.println("minus 1 live");
+            gameObjects[pacY][pacX] = GameObject.NONE;
+            gameObjects[newY][newX] = GameObject.DEADMAN;
+
+            pacX = newX;
+            pacY = newY;
+
+            isPacmanDead = true;
+            if (lives <= 0) {
+                System.out.println("GAME OVER\nSCORE: " + score);
+                gameOver = true;
+            }
             return;
         }
-        if(maze[newY][newX]!=CellType.PATH){
-            return;
-        }
 
-        if (gameObjects[newY][newX] == GameObject.DOT) {
-            gameObjects[newY][newX] = GameObject.NONE;
-            score++;
-            System.out.println("score is:"+score);  //not needed, used for debugging
+        if(gameOver==false){
+            switch (target){
+                case DOT -> {
+                    score += doubleScored ? 2 : 1;
+                    System.out.println("score is:" + score);
+                }
+                case UPGRADE_LIFE -> {
+                    lives++;
+                    System.out.println("upgrade life");
+                }
+                case UPGRADE_SCORE -> {
+                    score += 20;
+                    System.out.println("upgrade score");
+                }
+                case UPGRADE_FREEZE -> {
+                    freezeEndTime = System.currentTimeMillis() + 5_000;
+                    System.out.println("upgrade freeze");
+                }
+                case UPGRADE_SHIELD -> {
+                    shileded = true;
+                    shieldEndTime = System.currentTimeMillis() + 5_000;
+                    System.out.println("upgrade shield");
+                }
+                case UPGRADE_MULTIPLIER -> {
+                    doubleScored=true;
+                    doubleScoreEndTime=System.currentTimeMillis()+10_000;
+                    System.out.println("upgrade multiplier");
+                }
+            }
         }
 
         gameObjects[pacY][pacX] = GameObject.NONE;
-        pacX=newX;
-        pacY=newY;
+        pacX = newX;
+        pacY = newY;
         gameObjects[pacY][pacX] = GameObject.PACMAN;
-
     }
 
     public boolean isGameOver(){return gameOver;}
+
+    public boolean recentltDied(){return System.currentTimeMillis()-prevDeath<500;}
 
 }

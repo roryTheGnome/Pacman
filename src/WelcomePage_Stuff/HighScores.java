@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -77,7 +79,7 @@ public class HighScores extends JPanel {
        }
    }
 
-   private void getScores() {
+   /*private void getScores() {
        scores = new ArrayList<>();
        try (Scanner scnn = new Scanner(new File("src/HighScores.txt"))) {
            while (scnn.hasNextLine()) {
@@ -96,9 +98,28 @@ public class HighScores extends JPanel {
        if (scores.size() > 10) {
            scores = scores.subList(0, 10);
        }
-   }
+   }*/
 
-   private Color dropOfRainbow(int rank) {
+    private void getScores() {
+        scores = new ArrayList<>();
+        File file = new File("src/highscores.ser");
+
+        if (file.exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+                scores = (List<ScoreEntry>) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        scores.sort((a, b) -> Integer.compare(b.score, a.score));
+        if (scores.size() > 10) {
+            scores = scores.subList(0, 10);
+        }
+    }
+
+
+    private Color dropOfRainbow(int rank) {
        //yes i spend way tooo much time here
        Color orange = new Color(255, 89, 0);
        Color pink = new Color(255, 98, 244);

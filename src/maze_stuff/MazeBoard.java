@@ -79,6 +79,7 @@ public class MazeBoard extends JTable {
     private void startAnimationThread() {
         Thread animationThread = new Thread(() -> {
             while (true) {
+                if(mazeinator.isGameOver())break;
                 animationFrame = (animationFrame + 1) % 3;
                 repaint();
                 try {
@@ -116,9 +117,8 @@ public class MazeBoard extends JTable {
             }
 
             while (!Thread.currentThread().isInterrupted()) {
-                if (!model.canMove(dx, dy)) {
-                    break;
-                }
+                if(mazeinator.isGameOver())break;
+                if (!model.canMove(dx, dy))break;
 
                 model.movePacman(dx, dy);
                 animationFrame = (animationFrame + 1) % 3;
@@ -138,6 +138,7 @@ public class MazeBoard extends JTable {
     }
 
     public class CellRenderer extends DefaultTableCellRenderer {
+
         private final ImageIcon dotIcon = new ImageIcon("src/assets/dot.png");
         private final ImageIcon[] pacmanRight = {
                 new ImageIcon("src/assets/right/1.png"),
@@ -166,6 +167,12 @@ public class MazeBoard extends JTable {
         };
         private final ImageIcon blinkyIcon = new ImageIcon("src/assets/ghosts/blinky.png");
 
+
+        private final ImageIcon scoreMultiplier=new ImageIcon("src/assets/upgrades/apple.png");
+        private final ImageIcon extraScore=new ImageIcon("src/assets/upgrades/cherry.png");
+        private final ImageIcon freeze=new ImageIcon("src/assets/upgrades/strawberry.png");
+        private final ImageIcon heart=new ImageIcon("src/assets/upgrades/heart.png");
+        private final ImageIcon shield =new ImageIcon("src/assets/upgrades/shield.png");
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -207,6 +214,16 @@ public class MazeBoard extends JTable {
                         setIcon(blinkyIcon);
                     }else if(cell.object == GameObject.DEADMAN) {
                         setIcon(pacmanDeath[animationFrame]);
+                    }else if(cell.object == GameObject.UPGRADE_FREEZE) {
+                        setIcon(freeze);
+                    }else if(cell.object == GameObject.UPGRADE_LIFE) {
+                        setIcon(heart);
+                    } else if(cell.object == GameObject.UPGRADE_MULTIPLIER) {
+                        setIcon(scoreMultiplier);
+                    }else if(cell.object == GameObject.UPGRADE_SHIELD) {
+                        setIcon(shield);
+                    }else if(cell.object == GameObject.UPGRADE_SCORE) {
+                        setIcon(extraScore);
                     }else {
                         setIcon(null);
                     }
