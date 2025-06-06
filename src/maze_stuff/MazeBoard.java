@@ -140,6 +140,7 @@ public class MazeBoard extends JTable {
     public class CellRenderer extends DefaultTableCellRenderer {
 
         private final ImageIcon dotIcon = new ImageIcon("src/assets/dot.png");
+
         private final ImageIcon[] pacmanRight = {
                 new ImageIcon("src/assets/right/1.png"),
                 new ImageIcon("src/assets/right/2.png"),
@@ -160,11 +161,7 @@ public class MazeBoard extends JTable {
                 new ImageIcon("src/assets/up/2.png"),
                 new ImageIcon("src/assets/up/3.png")
         };
-        private final ImageIcon[] pacmanDeath = {
-                new ImageIcon("src/assets/death/1.png"),
-                new ImageIcon("src/assets/death/2.png"),
-                new ImageIcon("src/assets/death/3.png")
-        };
+
         private final ImageIcon blinkyIcon = new ImageIcon("src/assets/ghosts/blinky.png");
 
 
@@ -212,8 +209,6 @@ public class MazeBoard extends JTable {
                         setIcon(pacman[animationFrame]);
                     }else if(cell.object == GameObject.BLINKY) {
                         setIcon(blinkyIcon);
-                    }else if(cell.object == GameObject.DEADMAN) {
-                        setIcon(pacmanDeath[animationFrame]);
                     }else if(cell.object == GameObject.UPGRADE_FREEZE) {
                         setIcon(freeze);
                     }else if(cell.object == GameObject.UPGRADE_LIFE) {
@@ -229,7 +224,6 @@ public class MazeBoard extends JTable {
                     }
                 }
             }
-
             return c;
         }
     }

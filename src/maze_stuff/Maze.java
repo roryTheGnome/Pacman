@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static maze_stuff.Maze_Inator.score;
 
 public class Maze {
-    //public static int life;
+
     public static void startGame(int r,int c) {
         SwingUtilities.invokeLater(() -> {
 
@@ -43,7 +43,7 @@ public class Maze {
             scores.setForeground(Color.white);
             infoPanel.add(scores);
 
-            JLabel timeline=new JLabel("Time : 00:00");//DO NOT USE TIMER!!!!
+            JLabel timeline=new JLabel("Time : 00:00");//DO *NOT* USE TIMER!!!!
             timeline.setForeground(Color.white);
             infoPanel.add(timeline);
 
@@ -283,9 +283,7 @@ public class Maze {
 
     });
 }
-    public static void main (String args[]){
-        startGame(20,20);
-    }
+
 }
 
 // ***TODO LIST-Vol2***
@@ -299,7 +297,6 @@ public class Maze {
 //Add other ghosts
 //Create upgrades                                                           DONE
 //Add dead logic                                                            DONE
-//Add death animation
 //Adjust the screen for bigger maze size                                    DONE
 //Add go back to menu in game mode via crtl+shift+q                         DONE
 //Adjust the dead ends and make sure there r multi-path between 2 points    DONE

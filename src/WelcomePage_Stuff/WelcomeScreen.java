@@ -20,19 +20,19 @@ public class WelcomeScreen extends JFrame {
 
         loadFont();
 
-        ImageIcon backgroundIcon = new ImageIcon("src/assets/background.png");
+        ImageIcon backgroundIcon = new ImageIcon("src/assets/WelcomePage/background.png");
         JLabel backgroundLabel = new JLabel(backgroundIcon);
         backgroundLabel.setLayout(new BoxLayout(backgroundLabel, BoxLayout.Y_AXIS));
 
         JPanel logoPlace = new JPanel();
         logoPlace.setOpaque(false);
         logoPlace.setLayout(new BoxLayout(logoPlace, BoxLayout.Y_AXIS));
-        logoPlace.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0)); // padding
+        logoPlace.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
 
         JLabel logoLabel = new JLabel();
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         try {
-            ImageIcon logoIcon = new ImageIcon("src/assets/logo.png");
+            ImageIcon logoIcon = new ImageIcon("src/assets/WelcomePage/logo.png");
             Image logoImage = logoIcon.getImage().getScaledInstance(600, -1, Image.SCALE_SMOOTH);
             logoLabel.setIcon(new ImageIcon(logoImage));
         } catch (Exception e) { //backup plan
@@ -76,7 +76,7 @@ public class WelcomeScreen extends JFrame {
 
     private void loadFont() {
         try {
-            File fontFile = new File("src/assets/font2.ttf");
+            File fontFile = new File("src/assets/Fonts/font2.ttf");
             pacmanFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(pacmanFont);
         } catch (FontFormatException | IOException e) {
@@ -98,7 +98,7 @@ public class WelcomeScreen extends JFrame {
                     JFrame frame = new JFrame("Pac-Man High Scores");
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame.setSize(400, 500);
-                    frame.setContentPane(new HighScores());
+                    frame.setContentPane(new HighScores(frame));
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 });
@@ -180,4 +180,4 @@ public class WelcomeScreen extends JFrame {
 //set the game board size rules         DONE
 //Maybe add main to Main class??        DONE
 //Fix highscores                        DONE
-//Fix high scores
+//Fix high scores                       DONE

@@ -27,9 +27,7 @@ public class MazeModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        return new CellData(maze[rowIndex][columnIndex], objects[rowIndex][columnIndex]);
-    }
+    public Object getValueAt(int rowIndex, int columnIndex) {return new CellData(maze[rowIndex][columnIndex], objects[rowIndex][columnIndex]);}
 
     public boolean canMove(int dx, int dy) {
         int x = mazeinator.getPacX();

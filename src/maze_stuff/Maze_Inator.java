@@ -79,9 +79,7 @@ public class Maze_Inator {
 
     }
 
-    public boolean isInFrame(int x, int y) {
-        return  x>0 && y>0 && x<size && y<height;
-    }
+    public boolean isInFrame(int x, int y) {return  x>0 && y>0 && x<size && y<height;}
 
     public CellType[][] getMaze(){return maze;}
 
@@ -101,7 +99,7 @@ public class Maze_Inator {
                     if (maze[y][x - 1] == CellType.PATH) open++;
                     if (maze[y][x + 1] == CellType.PATH) open++;
 
-                    if (open == 1) { // dead end
+                    if (open == 1) {
                         List<int[]> directions = new ArrayList<>(List.of(
                                 new int[]{0, -1}, new int[]{0, 1},
                                 new int[]{-1, 0}, new int[]{1, 0}
@@ -142,7 +140,7 @@ public class Maze_Inator {
 
     private void spawnGhosts(){
 
-        int ghostCounter=4;//cause i found 4 photos
+        int ghostCounter=4;
         int ghostSoFar=0;
 
         while(ghostSoFar<ghostCounter){
@@ -230,7 +228,7 @@ public class Maze_Inator {
             gameObjects[next.y][next.x] = GameObject.BLINKY;
             newPositions.add(next);
         }
-        if (rando.nextInt(100) < 25) { // 25% chance
+        if (rando.nextInt(100) < 25) { // technically this gives 25% chance
             int ux = rando.nextInt(size);
             int uy = rando.nextInt(height);
             if (maze[uy][ux] == CellType.PATH && gameObjects[uy][ux] == GameObject.DOT) {
