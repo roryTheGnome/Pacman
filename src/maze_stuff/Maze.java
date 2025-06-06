@@ -294,7 +294,7 @@ public class Maze {
 //Fin a way to make heart red pls                                           NOPE      i changed my mind and add pacman face
 //Add game over logic                                                       DONE
 //Add the new score into the score board                                    DONE
-//Add other ghosts
+//Add other ghosts                                                          DONE
 //Create upgrades                                                           DONE
 //Add dead logic                                                            DONE
 //Adjust the screen for bigger maze size                                    DONE

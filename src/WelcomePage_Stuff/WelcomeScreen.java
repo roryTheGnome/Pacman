@@ -168,16 +168,4 @@ public class WelcomeScreen extends JFrame {
 
     }
 
-    public static void main(String[] args) {SwingUtilities.invokeLater(WelcomeScreen::new);}
 }
-
-//***TODO LIST***
-//add welcome page                      DONE
-//add buttons 3                         DONE
-//add high scores page                  DONE
-//add high scores doc                   DONE
-//connect it to the game                DONE
-//set the game board size rules         DONE
-//Maybe add main to Main class??        DONE
-//Fix highscores                        DONE
-//Fix high scores                       DONE

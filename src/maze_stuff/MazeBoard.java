@@ -163,7 +163,9 @@ public class MazeBoard extends JTable {
         };
 
         private final ImageIcon blinkyIcon = new ImageIcon("src/assets/ghosts/blinky.png");
-
+        private final ImageIcon clydeIcon = new ImageIcon("src/assets/ghosts/clyde.png");
+        private final ImageIcon inkyIcon = new ImageIcon("src/assets/ghosts/inky.png");
+        private final ImageIcon pinkyIcon = new ImageIcon("src/assets/ghosts/pinky.png");
 
         private final ImageIcon scoreMultiplier=new ImageIcon("src/assets/upgrades/apple.png");
         private final ImageIcon extraScore=new ImageIcon("src/assets/upgrades/cherry.png");
@@ -182,6 +184,7 @@ public class MazeBoard extends JTable {
                 if (cell.type == CellType.WALL) {
                     c.setBackground(Color.BLUE);
                     setIcon(null);
+                    setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
                 } else if (cell.type == CellType.PATH) {
                     c.setBackground(Color.BLACK);
 
@@ -209,6 +212,12 @@ public class MazeBoard extends JTable {
                         setIcon(pacman[animationFrame]);
                     }else if(cell.object == GameObject.BLINKY) {
                         setIcon(blinkyIcon);
+                    }else if(cell.object == GameObject.INKY) {
+                        setIcon(inkyIcon);
+                    }else if(cell.object == GameObject.CLYDE) {
+                        setIcon(clydeIcon);
+                    }else if(cell.object == GameObject.PINKY) {
+                        setIcon(pinkyIcon);
                     }else if(cell.object == GameObject.UPGRADE_FREEZE) {
                         setIcon(freeze);
                     }else if(cell.object == GameObject.UPGRADE_LIFE) {
