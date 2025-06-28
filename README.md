@@ -1,4 +1,4 @@
-# Pacman_25
+# Pacman
 
 A simple Pacman clone built in Java.  
 This project is designed to be opened and run directly in **IntelliJ IDEA** for easy setup and execution.
